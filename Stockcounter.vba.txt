@@ -1,0 +1,83 @@
+Sub stockcounter()
+
+'nominating different variables
+
+Dim tickerrow As Integer
+Dim tickercol As Integer
+Dim stockrow As Integer
+Dim stockcol As Integer
+Dim tickertype As String
+Dim stockvolume As Double
+Dim startvolume As Double
+Dim endvolume As Double
+
+tickerrow = 2
+tickercol = 9
+stockrow = 2
+stockcol = 10
+stockvolume = 0
+
+'nominating columns with added information
+
+Range("I1").Value = "Ticker"
+Range("J1").Value = "Stock Volume Total"
+Range("K1").Value = "Start/End Volume Difference"
+Range("L1").Value = "Percentage Change"
+
+    For i = 2 To 800000
+    
+    tickertype = Cells(i, 1).Value
+        
+        If tickertype <> Cells(i + 1, 1).Value Then
+        
+        'substracts end volume from start volume of ticker
+        
+        Cells(tickerrow, 11).Value = endvolume - startvolume
+        
+        'nomenclates ticker to column depending on different types
+        
+        Cells(tickerrow, tickercol).Value = tickertype
+        
+        'nomenclates start volume of ticker
+        
+        startvolume = Cells(i + 1, 6).Value
+        
+        'stockvolume counter before reset, adds all volume in one ticker
+        
+        stockvolume = stockvolume + Cells(i, 7).Value
+        
+        'stores stockvolume addition
+        
+        Cells(stockrow, stockcol).Value = stockvolume
+        
+        'adds one to the ticker row counter
+        
+        tickerrow = tickerrow + 1
+        
+        'adds one to the stock row counter
+        
+        stockrow = stockrow + 1
+        
+        'resets stockvolume counter for new ticker
+        
+        stockvolume = 0
+        
+        'divides end volume by the start volume to obtain percentage change
+        
+        Cells(tickerrow, 12).Value = (endvolume / startvolume) * 100
+        
+        Else:
+        
+        'adds to the stockvolume counter for the same ticker
+        
+        stockvolume = stockvolume + Cells(i, 7).Value
+        
+        'determines end volume for each ticker by adding one to i so
+        'last possible loop in the two same tickers includes value outside of else loop
+        endvolume = Cells(i + 1, 6).Value
+        
+        End If
+    
+    Next i
+        
+End Sub
